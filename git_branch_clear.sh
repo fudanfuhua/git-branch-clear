@@ -10,7 +10,7 @@ then
         echo
         case $local in 
         Y|y):
-        local="true";;
+        local="true" && echo `git br | grep ${regexp} | xargs -n 1`;;
         N|n):
         local="false";;
         *)
@@ -22,9 +22,9 @@ then
     if read -t50 -n1 -p "是否删除远端分支(y/n)：" remote
     then
         echo
-        case $remote in 
+        case $remote in
         Y|y):
-        remote="true";;
+        remote="true" && echo `git br -r | grep ${regexp} | xargs -n 1`;;
         N|n):
         remote="false";;
         *)
@@ -45,7 +45,6 @@ then
     if [ $remote == "true" ] 
     then
         echo '-----------remote--------------'
-	git br -r | grep ${regexp} | xargs -n 1000  
         git br -r | grep ${regexp} | cut -d '/' -f2 | xargs -n1 -I {} git push origin --delete {}
         echo "delete ${regexp} remote branch all ok"
         echo "${regexp} remote branch num---->`git br -r | grep ${regexp} | wc -l`"
@@ -59,7 +58,6 @@ then
     if [ $local = "true" ] 
     then
 	echo '-----------local--------------'
-        git br | grep ${regexp} | xargs -n 1000
         git br | grep ${regexp} | xargs -n1 -I {} git branch -D {}
         git fetch origin --prune
         git fetch origin
